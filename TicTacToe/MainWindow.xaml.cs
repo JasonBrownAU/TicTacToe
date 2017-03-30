@@ -18,6 +18,8 @@ namespace TicTacToe
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// TODO: organise code to be more modular, add a retry button, 
+    /// change background colour of winning row, make the AI better.
     public partial class MainWindow : Window
     {
         List<XOButton> tiles = new List<XOButton>();
@@ -48,6 +50,7 @@ namespace TicTacToe
             btn.Content = imgX;
             btn.IsEnabled = false;
             btn.Cross = true;
+            bool cont = true;
             crosses.Add(btn);
             tiles.Remove(btn);
             x++;
@@ -59,13 +62,42 @@ namespace TicTacToe
             myTxt.Text = btnsRemaining.ToString();
             if (x >= 3)
             {
-                winCondition(crosses, btn);
+                cont = winCondition(crosses, btn, btnsRemaining);
             }
+            
+            if (cont)
+            {
+                playerAI();
+            }
+        }
+
+        public void playerAI()
+        {
+            Random rnd = new Random();
+            int btnsRemaining = 0;
+            foreach (XOButton item in tiles)
+            {
+                btnsRemaining++;
+            }
+            int buttonIndex = rnd.Next(btnsRemaining);
+            Image imgO = new Image();
+            imgO.Source = new BitmapImage(new Uri("C://Users/Jason/Documents/Games/TicTacToe/TicTacToe/TicTacToeO.png"));
+            tiles[buttonIndex].Content = imgO;
+            tiles[buttonIndex].IsEnabled = false;
+            tiles[buttonIndex].Nought = true;
+            noughts.Add(tiles[buttonIndex]);
+            o++;
+            myTxt.Text = btnsRemaining.ToString();
+            if (o >= 3)
+            {
+                winCondition(noughts, tiles[buttonIndex], btnsRemaining);
+            }
+            tiles.Remove(tiles[buttonIndex]);
         }
 
 
 
-        public void winCondition(List<XOButton> btnList, XOButton btn)
+        public bool winCondition(List<XOButton> btnList, XOButton btn, int btnsRemaining)
         {
             bool winner = false;
 
@@ -110,16 +142,24 @@ namespace TicTacToe
                         item.IsEnabled = false;
                     }
                     myTxt.Text = "Congratulation! You are the Winner!";
+                    return false;
                 }
-                else
+                else if (btn.Nought)
                 {
                     foreach (XOButton item in tiles)
                     {
                         item.IsEnabled = false;
                     }
                     myTxt.Text = "Ooooo, you lose!";
+                    return false;
                 }
             }
+            else if ((btn.Cross && btnsRemaining == 0) || (btn.Nought && btnsRemaining == 1))
+            {
+                myTxt.Text = "Meh, draw.";
+                return false;
+            }
+            return true;
         }
 
         private void topLeft_Click(object sender, RoutedEventArgs e)

@@ -19,7 +19,7 @@ namespace TicTacToe
         public bool Nought
         {
             get { return nought; }
-            set { Nought = value; }
+            set { nought = value; }
         }
     }
 }
