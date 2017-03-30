@@ -1,0 +1,15 @@
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\bin\Debug\TicTacToe.exe.config
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\obj\Debug\TicTacToe.csprojResolveAssemblyReference.cache
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\obj\Debug\MainWindow.baml
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\obj\Debug\MainWindow.g.cs
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\obj\Debug\App.g.cs
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\obj\Debug\TicTacToe_MarkupCompile.cache
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\obj\Debug\TicTacToe.g.resources
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\obj\Debug\TicTacToe.Properties.Resources.resources
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\obj\Debug\TicTacToe.csproj.GenerateResource.Cache
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\bin\Debug\TicTacToe.exe
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\bin\Debug\TicTacToe.pdb
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\obj\Debug\TicTacToe.exe
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\obj\Debug\TicTacToe.pdb
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\jason\Documents\Games\TicTacToe\TicTacToe\obj\Debug\TicTacToe_MarkupCompile.lref
