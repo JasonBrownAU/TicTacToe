@@ -28,6 +28,7 @@ namespace TicTacToe
         
         int x = 0;
         int o = 0;
+        bool cont = true;
         
         public MainWindow()
         {
@@ -50,7 +51,6 @@ namespace TicTacToe
             btn.Content = imgX;
             btn.IsEnabled = false;
             btn.Cross = true;
-            bool cont = true;
             crosses.Add(btn);
             tiles.Remove(btn);
             x++;
@@ -63,103 +63,197 @@ namespace TicTacToe
             if (x >= 3)
             {
                 cont = winCondition(crosses, btn, btnsRemaining);
-            }
-            
-            if (cont)
+            }        
+            if (!cont || btnsRemaining == 0)
             {
-                playerAI();
+                gameResult(btn, btnsRemaining, !cont);
+            }
+            else
+            {
+                minmaxAlgorithm();
             }
         }
 
-        public void playerAI()
+        //public void playerAI()
+        //{
+        //    //Random rnd = new Random();
+        //    //int buttonIndex = rnd.Next(btnsRemaining);
+        //    //Image imgO = new Image();
+        //    //imgO.Source = new BitmapImage(new Uri("C://Users/Jason/Documents/Games/TicTacToe/TicTacToe/TicTacToeO.png"));
+        //    //tiles[buttonIndex].Content = imgO;
+        //    //tiles[buttonIndex].IsEnabled = false;
+        //    //tiles[buttonIndex].Nought = true;
+        //    //noughts.Add(tiles[buttonIndex]);
+        //    //o++;
+        //    //myTxt.Text = btnsRemaining.ToString();
+        //    //if (o >= 3)
+        //    //{
+        //    //    cont = winCondition(noughts, tiles[buttonIndex], btnsRemaining);
+        //    //    if (!cont)
+        //    //    {
+        //    //        gameResult(tiles[buttonIndex], btnsRemaining, !cont);
+        //    //    }
+        //    //}
+        //    //tiles.Remove(tiles[buttonIndex]);
+        //}
+
+        public bool winCondition(List<XOButton> btnList, XOButton btn, int btnsRemaining)
         {
-            Random rnd = new Random();
+            if (btnList.Contains(topLeft) && btnList.Contains(topMiddle) && btnList.Contains(topRight))
+            {
+                return false;
+            }
+            else if (btnList.Contains(middleLeft) && btnList.Contains(centre) && btnList.Contains(middleRight))
+            {
+                return false;
+            }
+            else if (btnList.Contains(bottomLeft) && btnList.Contains(bottomMiddle) && btnList.Contains(bottomRight))
+            {
+                return false;
+            }
+            else if (btnList.Contains(topLeft) && btnList.Contains(middleLeft) && btnList.Contains(bottomLeft))
+            {
+                return false;
+            }
+            else if (btnList.Contains(topMiddle) && btnList.Contains(centre) && btnList.Contains(bottomMiddle))
+            {
+                return false;
+            }
+            else if (btnList.Contains(topRight) && btnList.Contains(middleRight) && btnList.Contains(bottomRight))
+            {
+                return false;
+            }
+            else if (btnList.Contains(topLeft) && btnList.Contains(centre) && btnList.Contains(bottomRight))
+            {
+                return false;
+            }
+            else if (btnList.Contains(topRight) && btnList.Contains(centre) && btnList.Contains(bottomLeft))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public void gameResult(XOButton btn, int btnsRemaining, bool winner)
+        {
+        if (btn.Cross && winner)
+            {
+                foreach (XOButton item in tiles)
+                {
+                    item.IsEnabled = false;
+                }
+                myTxt.Text = "Congratulation! You are the Winner!";
+            }
+            else if (btn.Nought && winner)
+            {
+                foreach (XOButton item in tiles)
+                {
+                    item.IsEnabled = false;
+                }
+                myTxt.Text = "Ooooo, you lose!";
+            }
+            else if ((btn.Cross && btnsRemaining == 0 && !winner) || (btn.Nought && btnsRemaining == 1 && !winner))
+            {
+                myTxt.Text = "Meh, draw.";
+            }
+        }
+
+        public void minmaxAlgorithm()
+        {
+            string currentPlayer = "x";
             int btnsRemaining = 0;
+
+            foreach (XOButton btn in tiles.ToList())
+            {
+                List<XOButton> mmTiles = tiles.ToList();
+                List<XOButton> mmCrosses = crosses.ToList();
+                List<XOButton> mmNoughts = noughts.ToList();
+                mmTiles.Remove(btn);
+                mmNoughts.Add(btn);
+                int depth = 0;
+              
+                foreach (XOButton item in mmTiles.ToList())
+                {
+                    foreach (XOButton remaining in mmTiles.ToList())
+                    {
+                        btnsRemaining++;
+                    }
+                    while (btnsRemaining > 0)
+                    {
+                        if (currentPlayer == "o")
+                        {
+                            mmTiles.Remove(item);
+                            mmNoughts.Add(item);
+                            btnsRemaining--;
+                            depth++;
+                            if (!winCondition(mmNoughts, item, btnsRemaining))
+                            {
+                                btn.Score = 10 - depth;
+                                break;
+                            }
+                            else
+                            {
+                                currentPlayer = "x";
+                            }
+                        }
+                        if (currentPlayer == "x")
+                        {
+                            mmTiles.Remove(item);
+                            mmCrosses.Add(item);
+                            btnsRemaining--;
+                            if (!winCondition(mmCrosses, item, btnsRemaining))
+                            {
+                                btn.Score = -10 + depth;
+                                break;
+                            }
+                            else
+                            {
+                                currentPlayer = "o";
+                            }
+                        }                    
+                    }
+                }
+            }
+            btnsRemaining = 0;
             foreach (XOButton item in tiles)
             {
                 btnsRemaining++;
             }
-            int buttonIndex = rnd.Next(btnsRemaining);
-            Image imgO = new Image();
-            imgO.Source = new BitmapImage(new Uri("C://Users/Jason/Documents/Games/TicTacToe/TicTacToe/TicTacToeO.png"));
-            tiles[buttonIndex].Content = imgO;
-            tiles[buttonIndex].IsEnabled = false;
-            tiles[buttonIndex].Nought = true;
-            noughts.Add(tiles[buttonIndex]);
-            o++;
-            myTxt.Text = btnsRemaining.ToString();
-            if (o >= 3)
+            tiles[0].TopScore = true;
+            XOButton optimum = tiles[0];
+            foreach (XOButton item in tiles)
             {
-                winCondition(noughts, tiles[buttonIndex], btnsRemaining);
-            }
-            tiles.Remove(tiles[buttonIndex]);
-        }
-
-
-
-        public bool winCondition(List<XOButton> btnList, XOButton btn, int btnsRemaining)
-        {
-            bool winner = false;
-
-            if ( btnList.Contains(topLeft) && btnList.Contains(topMiddle) && btnList.Contains(topRight))
-            {
-                winner = true; 
-            }
-            else if ( btnList.Contains(middleLeft) && btnList.Contains(centre) && btnList.Contains(middleRight))
-            {
-                winner = true;
-            }
-            else if (btnList.Contains(bottomLeft) && btnList.Contains(bottomMiddle) && btnList.Contains(bottomRight))
-            {
-                winner = true;
-            }
-            else if (btnList.Contains(topLeft) && btnList.Contains(middleLeft) && btnList.Contains(bottomLeft))
-            {
-                winner = true;
-            }
-            else if (btnList.Contains(topMiddle) && btnList.Contains(centre) && btnList.Contains(bottomMiddle))
-            {
-                winner = true;
-            }
-            else if (btnList.Contains(topRight) && btnList.Contains(middleRight) && btnList.Contains(bottomRight))
-            {
-                winner = true;
-            }
-            else if (btnList.Contains(topLeft) && btnList.Contains(centre) && btnList.Contains(bottomRight))
-            {
-                winner = true;
-            }
-            else if (btnList.Contains(topRight) && btnList.Contains(centre) && btnList.Contains(bottomLeft))
-            {
-                winner = true;
-            }
-            if (winner)
-            {
-                if (btn.Cross)
+                if (item.Score > optimum.Score)
                 {
-                    foreach (XOButton item in tiles)
+                    foreach (XOButton btn in tiles)
                     {
-                        item.IsEnabled = false;
+                        btn.TopScore = false;
                     }
-                    myTxt.Text = "Congratulation! You are the Winner!";
-                    return false;
-                }
-                else if (btn.Nought)
-                {
-                    foreach (XOButton item in tiles)
-                    {
-                        item.IsEnabled = false;
-                    }
-                    myTxt.Text = "Ooooo, you lose!";
-                    return false;
+                    item.TopScore = true;
+                    optimum = item;
                 }
             }
-            else if ((btn.Cross && btnsRemaining == 0) || (btn.Nought && btnsRemaining == 1))
+            foreach (XOButton item in tiles.ToList())
             {
-                myTxt.Text = "Meh, draw.";
-                return false;
+                if (item.TopScore)
+                {
+                    Image imgO = new Image();
+                    imgO.Source = new BitmapImage(new Uri("C://Users/Jason/Documents/Games/TicTacToe/TicTacToe/TicTacToeO.png"));
+                    item.Content = imgO;
+                    item.IsEnabled = false;
+                    item.Nought = true;
+                    noughts.Add(item);
+                    tiles.Remove(item);
+                    cont = winCondition(noughts, item, btnsRemaining);
+                    if (!cont)
+                    {
+                        gameResult(item, btnsRemaining, !cont);
+                    }
+                }
             }
-            return true;
         }
 
         private void topLeft_Click(object sender, RoutedEventArgs e)

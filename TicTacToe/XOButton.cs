@@ -21,5 +21,17 @@ namespace TicTacToe
             get { return nought; }
             set { nought = value; }
         }
+        private bool topScore = false;
+        public bool TopScore
+        {
+            get { return topScore; }
+            set { topScore = value; }
+        }
+        private int score = 0;
+        public int Score
+        {
+            get { return score; }
+            set { score = value; }
+        }
     }
 }
