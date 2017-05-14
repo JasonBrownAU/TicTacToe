@@ -59,7 +59,7 @@ namespace TicTacToe
             {
                 btnsRemaining++;
             }
-            myTxt.Text = btnsRemaining.ToString();
+            //myTxt.Text = btnsRemaining.ToString();
             if (x >= 3)
             {
                 cont = winCondition(crosses, btn, btnsRemaining);
@@ -163,9 +163,8 @@ namespace TicTacToe
 
         public void minmaxAlgorithm()
         {
+            int btnsRemaining;
             string currentPlayer = "x";
-            int btnsRemaining = 0;
-
             foreach (XOButton btn in tiles.ToList())
             {
                 List<XOButton> mmTiles = tiles.ToList();
@@ -174,14 +173,16 @@ namespace TicTacToe
                 mmTiles.Remove(btn);
                 mmNoughts.Add(btn);
                 int depth = 0;
-              
+                
                 foreach (XOButton item in mmTiles.ToList())
                 {
+                    btnsRemaining = 0;
                     foreach (XOButton remaining in mmTiles.ToList())
                     {
                         btnsRemaining++;
+                        myTxt.Text = btnsRemaining.ToString();
                     }
-                    while (btnsRemaining > 0)
+                    while (btnsRemaining >= 0)
                     {
                         if (currentPlayer == "o")
                         {
